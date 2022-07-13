@@ -24,7 +24,10 @@ const generateWeaponEmbed = async (weapon) => {
         image: {
             url: weapon.displayIcon
         },
-        timestamp: new Date()
+        timestamp: new Date(),
+        footer: {
+            text: 'All data taken from https://valorant-api.com'
+        }
     };
 
     const skins = await weapon.getSkins();
@@ -65,7 +68,10 @@ const generateAgentEmbed = async (agent) => {
         image: {
             url: agent.fullPortrait
         },
-        timestamp: new Date()
+        timestamp: new Date(),
+        footer: {
+            text: 'All data taken from https://valorant-api.com'
+        }
     }
 
     const agentRole = await agent.getRole();
@@ -105,7 +111,10 @@ const generateAbilityEmbed = (ability, agent) => {
         image: {
             url: agent.fullPortrait
         },
-        timestamp: new Date()
+        timestamp: new Date(),
+        footer: {
+            text: 'All data taken from https://valorant-api.com'
+        }
     };
 
     return embed;
@@ -193,6 +202,9 @@ module.exports = {
                         const messageEmbed = {
                             color: 0xFFFFFF,
                             description: descriptionText,
+                            footer: {
+                                text: 'All data taken from https://valorant-api.com'
+                            }
                         };
                     
                         const message = await interaction.reply({

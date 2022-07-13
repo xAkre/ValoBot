@@ -20,6 +20,10 @@ const weaponSkinVariants = require('./models/weaponSkinVariants')(sequelize, Seq
 const skinThemes = require('./models/skinThemes')(sequelize, Sequelize.DataTypes);
 const skinBundles = require('./models/skinBundles')(sequelize, Sequelize.DataTypes);
 
+
+// ALL DATA IS TAKEN FROM https://valorant-api.com
+
+
 sequelize.sync({ force: true })
 
     // Get Agent Data And Add Roles, Abilities And Agents To Database 
@@ -70,10 +74,19 @@ sequelize.sync({ force: true })
                         // Abilites
                         const abilities = agentData[i].abilities;
 
+                        const renameAbilities = {
+                            'Ability1': 'Ability 1',
+                            'Ability2': 'Ability 2',
+                            'Grenade': 'Ability 3',
+                            'Ultimate': 'Ultimate',
+                            'Passive': 'Passive'
+                        };
+
                         for (let j = 0; j < abilities.length; j++) {
+                            console.log(abilities[j].slot);
                             const data = {
                                 agentId: agentData[i].uuid,
-                                slot: abilities[j].slot,
+                                slot: renameAbilities[abilities[j].slot],
                                 name: abilities[j].displayName,
                                 description: abilities[j].description,
                                 displayIcon: abilities[j].displayIcon
@@ -158,7 +171,7 @@ sequelize.sync({ force: true })
                                 const data = {
                                     id: variants[k].uuid,
                                     weaponSkinId: skins[j].uuid,
-                                    displayIcon: variants[k].displayIcon,
+                                    displayIcon: variants[k].displayIcon ? variants[k].displayIcon : skins[j].displayIcon,
                                     name: variants[k].displayName,
                                     video: variants[k].streamedVideo
                                 };
