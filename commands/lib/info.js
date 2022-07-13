@@ -151,17 +151,19 @@ module.exports = {
             })
             .then(async (res) => {
                 switch (res.length) {
-                    case 0:
+                    case 0: {
                         await interaction.reply('Weapon not found');
                         break;
-                    case 1:
+                    };
+                    case 1: {
                         const embed = await generateWeaponEmbed(res[0]);
-                        const reply = await interaction.reply({
+                        const message = await interaction.reply({
                             embeds: [embed],
                             fetchReply: true
                         });     
                         break;
-                    default:
+                    };
+                    default: {
                         const count = res.length >= 5 ? 5 : res.length;
                         const components = [];
 
@@ -222,6 +224,7 @@ module.exports = {
                         });
 
                         break;
+                    };
                 };
             });
         } 
@@ -242,17 +245,61 @@ module.exports = {
             })
             .then(async (res) => {
                 switch (res.length) {
-                    case 0:
+                    case 0: {
                         await interaction.reply('Agent not found');
                         break;
-                    case 1:
+                    };
+                    case 1: {
+                        const agent = res[0];
                         const embed = await generateAgentEmbed(res[0]);
-                        const reply = await interaction.reply({
+                        const abilities = await agent.getAbilities();
+                        let abilityRow = new MessageActionRow();
+
+                        if (abilities.length > 0) {
+                            const components = [];
+
+                            for (let i = 0; i < abilities.length; i++) {
+                                const currentAbility = abilities[i];
+                                components.push(
+                                    new MessageButton()
+                                        .setCustomId(`${i.toString()}`)
+                                        .setLabel(`${currentAbility.slot}`)
+                                        .setStyle('PRIMARY')
+                                );
+                            }
+
+                            abilityRow.addComponents(components);
+                        }
+
+                        const message = await interaction.reply({
                             embeds: [embed],
+                            components: abilities.length > 0 ? [abilityRow] : [],
                             fetchReply: true
-                        });     
+                        });
+
+                        const filter = (i) => {
+                            return i.user.id === interaction.user.id;
+                        };
+
+                        const collector = message.createMessageComponentCollector({
+                            filter,
+                            time: 30000
+                        });
+
+                        collector.on('collect', async (i) => {
+                            const index = parseInt(i.customId);
+                            const ability = abilities[index];
+                            
+                            const newEmbed = generateAbilityEmbed(ability, agent);
+
+                            await i.update({
+                                components: [abilityRow],
+                                embeds: [newEmbed]
+                            });
+                        });
                         break;
-                    default:
+                    };
+                    default: {
                         const count = res.length >= 5 ? 5 : res.length;
                         const components = [];
 
@@ -349,6 +396,7 @@ module.exports = {
                         });
 
                         break;
+                    };
                 };
             })
         }
