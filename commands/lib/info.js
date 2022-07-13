@@ -1,7 +1,8 @@
 const { SlashCommandBuilder, SlashCommandSubcommandBuilder, SlashCommandStringOption } = require('@discordjs/builders');
 const { weapons, agents } = require('../../database/models');
 const { Op } = require('sequelize');
-const { MessageActionRow, MessageButton, Interac } = require('discord.js');
+const { MessageActionRow, MessageButton } = require('discord.js');
+const { generateSearchResultsEmbed, generateAllResultsEmbed } = require('../../utilities/embeds');
 
 const generateWeaponEmbed = async (weapon) => {
     let embed = {
@@ -130,7 +131,7 @@ module.exports = {
                     .addStringOption(new SlashCommandStringOption()
                         .setName('agent')
                         .setDescription('The agent you want to get information about')
-                        .setRequired(true)    
+                        .setRequired(false)    
                     )
             )
             .addSubcommand(new SlashCommandSubcommandBuilder()
@@ -139,14 +140,26 @@ module.exports = {
                     .addStringOption(new SlashCommandStringOption()
                         .setName('weapon')
                         .setDescription('The weapon you want to get information about')
-                        .setRequired(true)    
+                        .setRequired(false)    
                     )
             ),
     execute: async (interaction) => {
 
         // If Checking Weapon Info
         if (interaction.options._subcommand === 'weapon') {
-            const target = interaction.options._hoistedOptions[0].value;
+            const target = interaction.options._hoistedOptions[0] ? interaction.options._hoistedOptions[0].value : false;
+
+            if (!target) {
+                const allWeapons = await weapons.findAll();
+
+                if (allWeapons.length > 0) {
+                    return await generateAllResultsEmbed(allWeapons, 'Weapons', interaction, 'name');
+                }
+                else {
+                    return await interaction.reply('There was an error getting weapon data');
+                };
+            };
+
             const weapon = await weapons.findAll({
                 where: {
                     name: {
@@ -173,58 +186,9 @@ module.exports = {
                         break;
                     };
                     default: {
-                        const count = res.length >= 5 ? 5 : res.length;
-                        const components = [];
-
-                        for (let i = 0; i < count; i++) {
-                            components.push(
-                                new MessageButton()
-                                    .setCustomId(i.toString())
-                                    .setLabel((i + 1).toString())
-                                    .setStyle('PRIMARY')
-                            );
-                        };
-                        
-                        const actionRow = new MessageActionRow()
-                            .addComponents(
-                                components
-                            );
-                        
-                        let descriptionText = `-------------------- Results --------------------\n\n`;
-
-                        for (let i = 0; i < count; i++) {
-                            descriptionText += `${i + 1}: ${res[i].name}\n`;
-                            if (res.length > 5) {
-                                descriptionText += `+${res.length - 5} more`
-                            };
-                        };
-
-                        const messageEmbed = {
-                            color: 0xFFFFFF,
-                            description: descriptionText,
-                            footer: {
-                                text: 'All data taken from https://valorant-api.com'
-                            }
-                        };
-                    
-                        const message = await interaction.reply({
-                            embeds: [messageEmbed],
-                            components: [actionRow],
-                            fetchReply: true
-                        });
-
-                        const filter = (i) => {
-                            return i.user.id === interaction.user.id;
-                        };
-
-                        const collector = message.createMessageComponentCollector({
-                            filter,
-                            time: 15000,
-                            max: 1
-                        });
+                        const { collector } = await generateSearchResultsEmbed(res, 'Weapon', interaction, 'name');
 
                         collector.on('collect', async (i) => {
-                            console.log(i);
                             const index = parseInt(i.customId);
                             const weapon = res[index];
                             const embed = await generateWeaponEmbed(weapon);
@@ -243,7 +207,19 @@ module.exports = {
 
         // If Checking Agent Info
         else {
-            const target = interaction.options._hoistedOptions[0].value;
+            const target = interaction.options._hoistedOptions[0] ? interaction.options._hoistedOptions[0].value : false;
+
+            if (!target) {
+                const allAgents = await agents.findAll();
+
+                if (allAgents.length > 0) {
+                    return await generateAllResultsEmbed(allAgents, 'Agents', interaction, 'name');
+                }
+                else {
+                    return await interaction.reply('There was an error getting agent data');
+                };
+            };
+
             const agent = await agents.findAll({
                 where: {
                     name: {
@@ -264,7 +240,9 @@ module.exports = {
                     case 1: {
                         const agent = res[0];
                         const embed = await generateAgentEmbed(res[0]);
-                        const abilities = await agent.getAbilities();
+                        const abilities = await agent.getAbilities({
+                            order: ['slot']
+                        });
                         let abilityRow = new MessageActionRow();
 
                         if (abilities.length > 0) {
@@ -312,59 +290,19 @@ module.exports = {
                         break;
                     };
                     default: {
-                        const count = res.length >= 5 ? 5 : res.length;
-                        const components = [];
-
-                        for (let i = 0; i < count; i++) {
-                            components.push(
-                                new MessageButton()
-                                    .setCustomId(i.toString())
-                                    .setLabel((i + 1).toString())
-                                    .setStyle('PRIMARY')
-                            );
-                        };
                         
-                        const actionRow = new MessageActionRow()
-                            .addComponents(
-                                components
-                            );
-                        
-                        let descriptionText = `-------------------- Results --------------------\n\n`;
-
-                        for (let i = 0; i < count; i++) {
-                            descriptionText += `${i + 1}: ${res[i].name}\n`;
-                            if (res.length > 5) {
-                                descriptionText += `+${res.length - 5} more`
-                            };
-                        };
-
-                        const messageEmbed = {
-                            color: 0xFFFFFF,
-                            description: descriptionText,
-                        };
-                    
-                        const message = await interaction.reply({
-                            embeds: [messageEmbed],
-                            components: [actionRow],
-                            fetchReply: true
-                        });
-
-                        const filter = (i) => {
-                            return i.user.id === interaction.user.id;
-                        };
-
-                        const collector = message.createMessageComponentCollector({
-                            filter,
-                            time: 15000,
-                            max: 1
-                        });
+                        const { collector } = await generateSearchResultsEmbed(res, 'Agent', interaction, 'name');
 
                         collector.on('collect', async (i) => {
                             const index = parseInt(i.customId);
                             const agent = res[index];
                             const embed = await generateAgentEmbed(agent);
 
-                            const abilities = await agent.getAbilities();
+                            const abilities = await agent.getAbilities({
+                                order: [
+                                    ['slot']
+                                ]
+                            });
                             let abilityRow = new MessageActionRow();
 
                             if (abilities.length > 0) {
@@ -388,6 +326,10 @@ module.exports = {
                                 components: abilities.length > 0 ? [abilityRow] : [],
                                 fetchReply: true
                             });
+
+                            const filter = (i) => {
+                                return i.user.id === interaction.user.id;
+                            };
 
                             const collector = message.createMessageComponentCollector({
                                 filter,
