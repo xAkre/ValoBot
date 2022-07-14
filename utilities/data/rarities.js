@@ -18,7 +18,19 @@ const rarityMultipliers = {
     'unknown': 2.2
 };
 
+const rarityColors = {
+    'common': 0xe8e8e8,
+    'uncommon': 0xd4ffd4,
+    'rare': 0xa8ceff,
+    'epic': 0xc696f2,
+    'legendary': 0xf7ec88,
+    'special': 0xf28ac5,
+    'unknown': 0x1f1f1f
+};
+
+
 module.exports = {
     rarityChances,
-    rarityMultipliers
+    rarityMultipliers,
+    rarityColors
 };

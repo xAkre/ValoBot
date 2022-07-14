@@ -33,8 +33,10 @@ module.exports = async (data, title, interaction, displayString = 'name') => {
     };
 
     if (dataLength > MAX_BUTTONS) {
-        description += `+${dataLength - MAX_BUTTONS} more`;
+        description += `+${dataLength - MAX_BUTTONS} more\n`;
     };
+
+    description += `\n-------------------- ${title} Results --------------------`;
 
     embed.description = description;
 

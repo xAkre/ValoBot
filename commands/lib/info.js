@@ -9,19 +9,18 @@ const generateWeaponEmbed = async (weapon) => {
         color: 0xFFFFFF,
         title: weapon.name,
         url: weapon.displayIcon,
-        description: `
-            --------------- Stats ---------------
-
-            Weapon Name: ${weapon.name}
-            Category: ${weapon.category}
-            Fire Rate: ${weapon.fireRate}
-            Magazine Size: ${weapon.magazine}
-            Run Speed: ${weapon.runSpeed}
-            Equip Time: ${weapon.equipTime}
-            Reload Time: ${weapon.reloadTime}
-            First Bullet Accuracy: ${weapon.firstBulletAccuracy}
-            Cost: ${weapon.cost}
-        `,
+        description: 
+            `--------------- Stats ---------------\n\n` + 
+            `Weapon Name: ${weapon.name}\n` +
+            `Category: ${weapon.category}\n` +
+            `Fire Rate: ${weapon.fireRate}\n` +
+            `Magazine Size: ${weapon.magazine}\n` +
+            `Run Speed: ${weapon.runSpeed}\n` +
+            `Equip Time: ${weapon.equipTime}\n` +
+            `Reload Time: ${weapon.reloadTime}\n` +
+            `First Bullet Accuracy: ${weapon.firstBulletAccuracy}\n` +
+            `Cost: ${weapon.cost}\n`
+        ,
         image: {
             url: weapon.displayIcon
         },
@@ -58,14 +57,14 @@ const generateAgentEmbed = async (agent) => {
         thumbnail: {
             url: agent.displayIcon
         },
-        description: `
-            Info 
-            ---------------------------------
-            Agent Name: ${agent.name}
-            ---------------------------------
-            Agent Description: ${agent.description}
-            ---------------------------------
-        `,
+        description: 
+            `Info\n` +
+            `---------------------------------\n` +
+            `Agent Name: ${agent.name}\n` + 
+            `---------------------------------\n` +
+            `Agent Description: ${agent.description}\n` +
+            `---------------------------------\n`
+        ,
         image: {
             url: agent.fullPortrait
         },
@@ -78,13 +77,12 @@ const generateAgentEmbed = async (agent) => {
     const agentRole = await agent.getRole();
 
     if (agentRole) {
-        embed.description += `Agent Role: ${agentRole.name}
-            ---------------------------------
-            Role Description: ${agentRole.description}
-            ---------------------------------
-            Click Buttons Below To See Abilities
-        `;
-        
+        embed.description += 
+            `Agent Role: ${agentRole.name}\n` +
+            `---------------------------------\n` + 
+            `Role Description: ${agentRole.description}\n` +
+            `---------------------------------\n` + 
+            `Click Buttons Below To See Abilities`;
     }
 
     return embed
@@ -98,17 +96,17 @@ const generateAbilityEmbed = (ability, agent) => {
         thumbnail: {
             url: ability.displayIcon ? ability.displayIcon : null
         },
-        description: `
-            Info
-            ---------------------------------
-            Agent Name: ${agent.name}
-            ---------------------------------
-            Ability Slot: ${ability.slot}
-            ---------------------------------
-            Ability Name: ${ability.name}
-            ---------------------------------
-            Ability Description: ${ability.description}
-        `,
+        description: 
+            `Info\n` +
+            `---------------------------------\n` +
+            `Agent Name: ${agent.name}\n` +
+            `---------------------------------\n` +
+            `Ability Slot: ${ability.slot}\n` +
+            `---------------------------------\n` +
+            `Ability Name: ${ability.name}\n` +
+            `---------------------------------\n` +
+            `Ability Description: ${ability.description}`
+        ,
         image: {
             url: agent.fullPortrait
         },

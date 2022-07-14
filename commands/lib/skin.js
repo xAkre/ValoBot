@@ -26,16 +26,15 @@ const createSkinEmbed = async (skin, variants, index) => {
         thumbnail: {
             url: bundles.length > 0 ? bundles[0].displayIcon : variant.displayIcon
         },
-        description: `
-            ---------------------------------
-            Skin Name: ${skin.name}
-            ---------------------------------
-            Variant: ${variant.name}
-            ---------------------------------
-            Skin Set: ${theme.name}${bundles.length > 0 ? `\nFrom Bundle: ${bundles[0].name}` : ``}
-            Variants: ${variants.length}
-            \n\u200b\n\u200b
-        `,
+        description: 
+            `---------------------------------\n` +
+            `Skin Name: ${skin.name}\n` +
+            `---------------------------------\n` +
+            `Variant: ${variant.name}\n` +
+            `---------------------------------\n` +
+            `Skin Set: ${theme.name}${bundles.length > 0 ? `\nFrom Bundle: ${bundles[0].name}` : ``}\n` +
+            `Variants: ${variants.length}\n\u200b\n\u200b`
+        ,
         image: {
             url: variant.displayIcon
         },

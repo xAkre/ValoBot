@@ -5,7 +5,7 @@ const RESULTS_PER_SLIDE = 20;
 const generateDescription = (data, title, displayString) => {
     const dataLength = data.length;
 
-    let description = `-------------------- All Results For ${title} --------------------\n`;
+    let description = `-------------------- All Results For ${title} --------------------\n\n`;
     
     for (let i = 0; i < dataLength; i++) {
         description += `${data[i][displayString]}\n`;
@@ -48,8 +48,8 @@ module.exports = async (data, title, interaction, displayString = 'name') => {
         data.slice(currentIndex, currentIndex + RESULTS_PER_SLIDE), 
         title, 
         displayString
-    );
-
+    ) + `\n-------------------- All Results For ${title} --------------------`;
+    
     embed.description = description;
 
     let message;

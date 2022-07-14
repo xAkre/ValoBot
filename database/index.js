@@ -78,6 +78,21 @@ sequelize.sync({ force: true })
                         
                         await agents.create(data);
 
+                        // Temporary Agent Cards
+
+
+
+                        const cardData = {
+                            agentId: agentData[i].uuid,
+                            baseHp: 100,
+                            baseAtk: 100,
+                            baseDef: 100
+                        };
+
+                        await agentCards.create(cardData);
+
+
+
                         // Abilites
                         const abilities = agentData[i].abilities;
 
@@ -133,6 +148,20 @@ sequelize.sync({ force: true })
 
                         await weapons.create(data);
 
+                        // Temporary Weapon Cards
+
+
+
+                        const cardData = {
+                            weaponId: weaponData[i].uuid,
+                            baseAtk: 100,
+                            basePen: 100
+                        };
+
+                        await weaponCards.create(cardData);
+
+
+
                         // Weapon Damages
                         const damages = weaponData[i].weaponStats ? weaponData[i].weaponStats.damageRanges : [
                             {
@@ -174,12 +203,17 @@ sequelize.sync({ force: true })
                             const variants = skins[j].chromas;
 
                             for (let k = 0; k < variants.length; k++) {
-                                const data = {
+                                let data = {
                                     id: variants[k].uuid,
                                     weaponSkinId: skins[j].uuid,
                                     displayIcon: variants[k].displayIcon ? variants[k].displayIcon : skins[j].displayIcon,
                                     name: variants[k].displayName,
                                     video: variants[k].streamedVideo
+                                };
+
+                                // Fix Issue Where Default Skins Had A Big X As The Image
+                                if (data.name === weaponData[i].displayName) {
+                                    data.displayIcon = weaponData[i].displayIcon
                                 };
 
                                 await weaponSkinVariants.create(data);

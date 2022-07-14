@@ -10,13 +10,13 @@ const generateThemeEmbed = async (theme) => {
     let embed = {
         color: 0xFFFFFF,
         title: theme.name,
-        description: `
-            ---------------------------------
-            Theme Name: ${theme.name}
-            ---------------------------------
-            Is Bundle: ${bundles.length > 0 ? 'Yes' : 'No'}
-            ---------------------------------
-        `,
+        description: 
+            `---------------------------------\n` +
+            `Theme Name: ${theme.name}\n` +
+            `---------------------------------\n` +
+            `Is Bundle: ${bundles.length > 0 ? 'Yes' : 'No'}\n` +
+            `---------------------------------`
+        ,
         timestamp: new Date(),
         footer: {
             text: `All data taken from https://valorant-api.com`

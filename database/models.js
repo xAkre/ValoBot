@@ -45,6 +45,11 @@ models.weaponSkins.hasMany(models.weaponSkinVariants, {
     as: 'variants'
 });
 
+models.weaponSkins.belongsTo(models.weapons, {
+    foreignKey: 'weaponId',
+    as: 'weapon'
+}),
+
 models.weaponSkins.belongsTo(models.skinThemes, {
     foreignKey: 'themeId',
     as: 'theme'
@@ -85,10 +90,26 @@ models.agents.hasMany(models.agentCards, {
     as: 'cards'
 });
 
+models.agentCards.belongsTo(models.agents, {
+    foreignKey: 'agentId',
+    as: 'agent'
+});
+
 models.agentCards.hasMany(models.userAgentCards, {
     foreignKey: 'agentCardId',
     as: 'agentCard'
 });
+
+models.weapons.hasMany(models.weaponCards, {
+    foreignKey: 'weaponId',
+    as: 'cards'
+});
+
+models.weaponCards.hasMany(models.userWeaponCards, {
+    foreignKey: 'weaponCardId',
+    as: 'weaponCard'
+});
+
 
 
 // Exports
@@ -105,5 +126,10 @@ module.exports = {
     weaponSkins: models.weaponSkins,
     weaponSkinVariants: models.weaponSkinVariants,
     skinThemes: models.skinThemes,
-    skinBundles: models.skinBundles
+    skinBundles: models.skinBundles,
+    users: models.users,
+    agentCards: models.agentCards,
+    userAgentCards: models.userAgentCards,
+    weaponCards: models.weaponCards,
+    userWeaponCards: models.userWeaponCards
 };
