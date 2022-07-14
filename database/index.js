@@ -21,6 +21,11 @@ const weaponSkins = require('./models/weaponSkins')(sequelize, Sequelize.DataTyp
 const weaponSkinVariants = require('./models/weaponSkinVariants')(sequelize, Sequelize.DataTypes);
 const skinThemes = require('./models/skinThemes')(sequelize, Sequelize.DataTypes);
 const skinBundles = require('./models/skinBundles')(sequelize, Sequelize.DataTypes);
+const users = require('./models/users')(sequelize, Sequelize.DataTypes);
+const agentCards = require('./models/agentCards')(sequelize, Sequelize.DataTypes);
+const userAgentCards = require('./models/userAgentCards')(sequelize, Sequelize.DataTypes);
+const weaponCards = require('./models/weaponCards')(sequelize, Sequelize.DataTypes);
+const userWeaponCards = require('./models/userWeaponCards')(sequelize, Sequelize.DataTypes);
 
 
 // ALL DATA IS TAKEN FROM https://valorant-api.com

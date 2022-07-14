@@ -16,7 +16,12 @@ const models = {
     weaponSkins: require('./models/weaponSkins')(sequelize, Sequelize.DataTypes),
     weaponSkinVariants: require('./models/weaponSkinVariants')(sequelize, Sequelize.DataTypes),
     skinThemes: require('./models/skinThemes')(sequelize, Sequelize.DataTypes),
-    skinBundles: require('./models/skinBundles')(sequelize, Sequelize.DataTypes)
+    skinBundles: require('./models/skinBundles')(sequelize, Sequelize.DataTypes),
+    users: require('./models/users')(sequelize, Sequelize.DataTypes),
+    agentCards: require('./models/agentCards')(sequelize, Sequelize.DataTypes),
+    userAgentCards: require('./models/userAgentCards')(sequelize, Sequelize.DataTypes),
+    weaponCards: require('./models/weaponCards')(sequelize, Sequelize.DataTypes),
+    userWeaponCards: require('./models/userWeaponCards')(sequelize, Sequelize.DataTypes)
 };
 
 
@@ -71,6 +76,18 @@ models.roles.hasMany(models.agents, {
 models.agents.belongsTo(models.roles, {
     foreignKey: 'roleId',
     as: 'role'
+});
+
+// Cards
+
+models.agents.hasMany(models.agentCards, {
+    foreignKey: 'agentId',
+    as: 'cards'
+});
+
+models.agentCards.hasMany(models.userAgentCards, {
+    foreignKey: 'agentCardId',
+    as: 'agentCard'
 });
 
 
