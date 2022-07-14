@@ -85,7 +85,6 @@ sequelize.sync({ force: true })
                         };
 
                         for (let j = 0; j < abilities.length; j++) {
-                            console.log(abilities[j].slot);
                             const data = {
                                 agentId: agentData[i].uuid,
                                 slot: renameAbilities[abilities[j].slot],
