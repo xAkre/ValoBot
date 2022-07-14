@@ -7,6 +7,10 @@ const generateThemeEmbed = async (theme) => {
     const bundles = await theme.getBundles();
     const skins = await theme.getSkins();
 
+    console.log(bundles);
+
+    console.log(theme.name);
+
     let embed = {
         color: 0xFFFFFF,
         title: theme.name,

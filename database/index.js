@@ -3,6 +3,8 @@ const dotenv = require('dotenv').config();
 const fs = require('node:fs');
 const path = require('node:path');
 const axios = require('axios');
+const replaceBundleNames = require('./data/bundlesNames');
+const replaceThemeNames = require('./data/themesNames');
 
 const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD, {
     host: 'localhost',
@@ -195,6 +197,12 @@ sequelize.sync({ force: true })
                     
                     // Themes
                     for (let i = 0; i < themesData.length; i++) {
+
+                        // Manually change duplicate themes
+                        if (replaceThemeNames[themesData[i].uuid]) {
+                            themesData[i].displayName = replaceThemeNames[themesData[i].uuid];
+                        }
+                        
                         const data = {
                             id: themesData[i].uuid,
                             name: themesData[i].displayName,
@@ -213,6 +221,12 @@ sequelize.sync({ force: true })
                     const bundlesData = res.data.data;
 
                     for (let i = 0; i < bundlesData.length; i++) {
+
+                        // Manually change duplicate bundles
+                        if (replaceBundleNames[bundlesData[i].uuid]) {
+                            bundlesData[i].displayName = replaceBundleNames[bundlesData[i].uuid];
+                        }
+
                         const data = {
                             id: bundlesData[i].uuid,
                             name: bundlesData[i].displayName,
