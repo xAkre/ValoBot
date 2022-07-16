@@ -16,7 +16,8 @@ module.exports = {
             embeds: [data.embed],
             components: [data.actionRow],
             fetchReply: true
-        })
+        });
+        console.log(message.id);
         
         const droppedTime = new Date();
 
@@ -49,20 +50,20 @@ module.exports = {
                         .setStyle('SUCCESS')
                         .setDisabled(true)
                 );
-        
-            const card = await activeDrops.updateDrop(i.user.id, i.message.id);
+            
+            const card = await activeDrops.updateDrop(i.user.id, message.id);
 
             await i.update({
                 components: [collectedActionRow]
             });
 
             return await i.followUp({
-                content: `\`\`\`Card claimed by ${i.user.tag} (${i.user.id})\nTime Taken: ${timeTaken}s\nCard ID: ${card.id}\`\`\``
+                content: `\`\`\`Card claimed by ${i.user.tag} (${card.userId})\nTime Taken: ${timeTaken}s\nCard ID: ${card.id}\`\`\``
             });
         });
 
-        collector.on('end', (i) => {
-            drops.deleteDrop(i.first().message.id);
+        collector.on('end', async (i) => {
+            drops.deleteDrop(message.id);
         });
     }
 };

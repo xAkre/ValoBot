@@ -94,8 +94,6 @@ module.exports = async (data, title, interaction, displayString = 'name') => {
             };
         };
 
-        console.log(currentIndex)
-
         const description = generateDescription(
             data.slice(currentIndex, currentIndex + RESULTS_PER_SLIDE), 
             title, 

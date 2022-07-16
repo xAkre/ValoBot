@@ -1,3 +1,4 @@
 module.exports = {
-    capitalize: require('./lib/capitalize')
+    capitalize: require('./lib/capitalize'),
+    avatar: require('./lib/avatar')
 };

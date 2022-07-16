@@ -96,6 +96,10 @@ models.agentCards.belongsTo(models.agents, {
 });
 
 models.agentCards.hasMany(models.userAgentCards, {
+    foreignKey: 'agentCardId'
+});
+
+models.userAgentCards.belongsTo(models.agentCards, {
     foreignKey: 'agentCardId',
     as: 'agentCard'
 });
@@ -106,10 +110,23 @@ models.weapons.hasMany(models.weaponCards, {
 });
 
 models.weaponCards.hasMany(models.userWeaponCards, {
+    foreignKey: 'weaponCardId'
+});
+
+models.userWeaponCards.belongsTo(models.weaponCards, {
     foreignKey: 'weaponCardId',
     as: 'weaponCard'
 });
 
+models.userWeaponCards.belongsTo(models.weaponSkinVariants, {
+    foreignKey: 'skinId',
+    as: 'skin'
+});
+
+models.weaponCards.belongsTo(models.weapons, {
+    foreignKey: 'weaponId',
+    as: 'weapon'
+});
 
 
 // Exports

@@ -28,9 +28,20 @@ const rarityColors = {
     'unknown': 0x1f1f1f
 };
 
+const rarityEmotes = {
+    'common': '\:white_circle:',
+    'uncommon': '\:green_circle:',
+    'rare': '\:blue_circle:',
+    'epic': '\:purple_circle:',
+    'legendary': '\:yellow_circle:',
+    'special': '\:red_circle:',
+    'unknown': '\:black_circle:'
+};
+
 
 module.exports = {
     rarityChances,
     rarityMultipliers,
-    rarityColors
+    rarityColors,
+    rarityEmotes
 };
